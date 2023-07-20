@@ -1,0 +1,70 @@
+<ion-header [translucent]="true">
+  <ion-toolbar [class.dark-theme]="darkMode">
+    <ion-title class="header ion-text-center">
+      MOVIES AND SERIES
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [class.dark-theme]="darkMode">
+
+  <ion-segment [(ngModel)]="selectedOption" class="segment-buttons">
+    <ion-segment-button value="movies" [class.dark-theme]="darkMode">
+      MOVIES
+    </ion-segment-button>
+    <ion-segment-button value="series" [class.dark-theme]="darkMode">
+      SERIES
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-item-divider class="input-search" [class.dark-theme]="darkMode">
+
+    <ion-select [(ngModel)]="sortingOption" class="select">
+      <ion-select-option value="year">Year</ion-select-option>
+    </ion-select>
+
+    <ion-input [(ngModel)]="searchText" placeholder="Search..." [class.dark-theme]="darkMode"></ion-input>
+    <button (click)="searchItems()" class="search-button">Search</button>
+    
+  </ion-item-divider>
+
+  <ng-container *ngIf="!showDetails">
+    <div class="card-container" *ngFor="let year of yearsArray">
+      <ion-card *ngFor="let item of itemsGroupedByYear[year]" (click)="getDetails(item.imdbID, item)" class="card">
+
+        <img alt="Poster" [src]="item.Poster" />
+
+        <ion-card-header>
+          <ion-card-title>{{ item.Title }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          {{ item.Year }}
+        </ion-card-content>
+
+      </ion-card>
+      
+    </div>
+  </ng-container>
+
+  <div *ngIf="showDetails" class="details">
+
+    <img [src]="selectedFilm?.Poster" alt="Poster"/>
+    <h2>{{ selectedFilm?.Title }}</h2>
+    <p class="year-genre-runtime" [class.dark-theme]="darkMode">{{ selectedFilm?.Year }} - {{ selectedFilm?.Genre }} - Runtime: {{ selectedFilm?.Runtime }}</p>
+    <p>{{ selectedFilm?.Plot }}</p>
+    <p>Released:{{ selectedFilm?.Released }}</p>
+    <p>Director:{{ selectedFilm?.Director }}</p>
+    <p>Actors:{{ selectedFilm?.Actors }}</p>
+    <p>Awards:{{ selectedFilm?.Awards }}</p>
+    <p>Rating:{{ selectedFilm?.imdbRating }}</p>
+      
+    <ion-button (click)="goBack()" class="go-back-button">GO BACK</ion-button>
+
+  </div>
+
+  <ion-icon name="moon-outline" class="toggle-icon moon" (click)="toggleTheme()" *ngIf="showIcon1"></ion-icon>
+  <ion-icon name="sunny-outline" class="toggle-icon-active sun" (click)="toggleTheme()" *ngIf="showIcon2"></ion-icon>
+  
+
+</ion-content>
